@@ -13,13 +13,13 @@ class AuthRepositoryImpl implements AuthRepository {
     String email,
     String password,
   ) async {
-    final response =
-        await datasource.login(email, password);
+    final response = await datasource.login(email, password);
 
-    final user =
-        UserModel.fromJson(response['user']);
+    if (response['user'] == null) {
+      throw Exception(response['error'] ?? 'Credenciales incorrectas');
+    }
 
-    return user;
+    return UserModel.fromJson(response['user']);
   }
 
   @override
@@ -28,10 +28,10 @@ class AuthRepositoryImpl implements AuthRepository {
     String password,
     String name,
   ) async {
-    await datasource.register(
-      email,
-      password,
-      name,
-    );
+    final response = await datasource.register(email, password, name);
+
+    if (response['error'] != null) {
+      throw Exception(response['error']);
+    }
   }
 }

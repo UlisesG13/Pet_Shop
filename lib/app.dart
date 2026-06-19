@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 
+import 'core/constants/app_constants.dart';
+import 'core/dependency_injection/injection_container.dart';
+import 'core/routes/app_routes.dart';
+import 'shared/theme/app_theme.dart';
+
 class PetShopApp extends StatelessWidget {
-  const PetShopApp({super.key});
+  final InjectionContainer di;
+
+  const PetShopApp({super.key, required this.di});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Pet Shop',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.blue,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text(
-            'Pet Shop',
-          ),
-        ),
+    return di.provide(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: AppConstants.appName,
+        theme: AppTheme.light(),
+        initialRoute: AppRoutes.initial,
+        onGenerateRoute: AppRoutes.onGenerateRoute,
       ),
     );
   }

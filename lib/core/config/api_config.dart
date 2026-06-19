@@ -1,4 +1,3 @@
 class ApiConfig {
-  static const String baseUrl =
-      'https://uginses.actividades.icu';
+  static const String baseUrl = 'https://uginses.actividades.icu';
 }

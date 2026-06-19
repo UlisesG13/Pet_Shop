@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'app.dart';
+import 'core/dependency_injection/injection_container.dart';
 
 void main() {
-  runApp(
-    const PetShopApp(),
-  );
+  final di = InjectionContainer();
+  runApp(PetShopApp(di: di));
 }

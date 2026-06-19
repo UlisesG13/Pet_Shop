@@ -14,40 +14,57 @@ class AuthViewModel extends ChangeNotifier {
   });
 
   bool loading = false;
-
+  String? error;
   UserEntity? user;
 
-  Future<void> login(
+  bool get isLoggedIn => user != null;
+
+  Future<bool> login(
     String email,
     String password,
   ) async {
     loading = true;
+    error = null;
     notifyListeners();
 
-    user = await loginUseCase(
-      email,
-      password,
-    );
-
-    loading = false;
-    notifyListeners();
+    try {
+      user = await loginUseCase(email, password);
+      return true;
+    } catch (e) {
+      error = _clean(e);
+      return false;
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
   }
 
-  Future<void> register(
+  Future<bool> register(
     String email,
     String password,
     String name,
   ) async {
     loading = true;
+    error = null;
     notifyListeners();
 
-    await registerUseCase(
-      email,
-      password,
-      name,
-    );
+    try {
+      await registerUseCase(email, password, name);
+      return true;
+    } catch (e) {
+      error = _clean(e);
+      return false;
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
+  }
 
-    loading = false;
+  void logout() {
+    user = null;
+    error = null;
     notifyListeners();
   }
+
+  String _clean(Object e) => e.toString().replaceFirst('Exception: ', '');
 }
